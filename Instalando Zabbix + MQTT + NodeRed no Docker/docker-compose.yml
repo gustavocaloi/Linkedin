@@ -1,35 +1,22 @@
 version: '3'
 services:
   postgres:
-    container_name: postgres
-    image: postgres:latest
+    container_name: postgres              #nome utilizado nas entradas de conexão do Zabbix
+    hostname: postgres                    #nome do servidor hostname
+    image: postgres:latest                #imagem oficial da sua ultima versão
     ports:
-      - 5432:5432
+      - 5432:5432                         #porta padrao exposta
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data   #criaçao de um volume no docker para persistir os dados
     restart: always
     environment:
-      - POSTGRES_DB=zabbix
-      - POSTGRES_USER=zabbix
-      - POSTGRES_PASSWORD=suasenha
-
-  pgadmin4:
-    image: dpage/pgadmin4:latest
-    container_name: pgadmin4
-    volumes:
-      - pgadmin:/var/lib/pgadmin
-    ports:
-      - 80:80
-    environment:
-      - PGADMIN_DEFAULT_PASSWORD=suasenha
-      - PGADMIN_DEFAULT_EMAIL=seuemail@dominio.com.br
-    restart: always
-    depends_on:
-      - postgres
+      - POSTGRES_DB=zabbix                #nome da base de dados
+      - POSTGRES_USER=zabbix              #nome do usuario do banco de dados
+      - POSTGRES_PASSWORD=suasenha        #senha do usuario do banco de dados
 
   mqtt:
-    image: eclipse-mosquitto
     container_name: mqtt
+    image: eclipse-mosquitto
     hostname: mqtt
     ports:
       - 1883:1883
